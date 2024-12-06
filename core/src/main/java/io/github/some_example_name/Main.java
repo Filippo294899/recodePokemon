@@ -26,9 +26,11 @@ import io.github.some_example_name.player.inventory.Inventory;
 public class Main extends Game {
     private SpriteBatch batch;
     private Texture image;
+    private City ourCity = null;
     
     public  void showcity(){
-        this.setScreen(new City(this));
+        if (ourCity == null) ourCity = new City(this);
+        this.setScreen(ourCity);
     }
     public void openinventory(){
         this.setScreen(new Inventory(this));

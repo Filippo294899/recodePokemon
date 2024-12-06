@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.badlogic.gdx.utils.Array;
-
+import io.github.some_example_name.Main;
 
 @SuppressWarnings("all")
 public class Player   {
@@ -36,15 +36,16 @@ public class Player   {
     public float y;
     public float x;
     public float speed=1;
-    
+    public final Main app;
     TiledMap map;
     TiledMapTileLayer collisionlayer ;
     int collisionx ;
     int collisiony ;
     private String lastdirection = "right";
-    public Player(float x, float y) {
+    public Player(float x, float y , final Main app) {
         this.x = x;
         this.y = y;
+        this.app =app;
        
       
     }
@@ -85,55 +86,95 @@ public class Player   {
         camera.position.set(x , y,0);
         camera.zoom=3;
         camera.update();
+        if (Gdx.input.isKeyPressed(Input.Keys.E)){
+            app.openinventory();
+        }
     }
     boolean collision;
     
     public void render() {
-
+        // Dimensioni di una cella
         float tileWidth = collisionlayer.getTileWidth();
         float tileHeight = collisionlayer.getTileHeight();
-        int cellX = (int) (x / tileWidth);
-        int cellY = (int) (y / tileHeight);
     
-        TiledMapTileLayer.Cell cell = collisionlayer.getCell(cellX, cellY);
+        // Dimensioni del giocatore (esempio, adattale alle dimensioni effettive)
+        float playerWidth = 32; // larghezza del giocatore in pixel
+        float playerHeight = 32; // altezza del giocatore in pixel
+    
+        // Calcola la nuova posizione
+        float newX = x;
+        float newY = y;
     
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             changeAnimation(suAnimation);
-            y += speed;
+            newY += speed; // Movimento verso l'alto
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             changeAnimation(giuAnimation);
-            y -= speed; 
+            newY -= speed; // Movimento verso il basso
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             changeAnimation(destraAnimation);
-            x += speed; 
+            newX += speed; // Movimento verso destra
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             changeAnimation(sinistraAnimation);
-            x -= speed; 
-        } else {
-            animationTime = 0; 
+            newX -= speed; // Movimento verso sinistra
+        }
+         else {
+            animationTime = 0; // Nessun movimento
         }
         
-        
-       
-        
-        System.out.println("cella x " + cellX + " cella y " + cellY);
-        if (cell == null) {
-       
-            
-
-        }else{
-            System.out.println("collisione");
+    
+        // Verifica la collisione sulla nuova posizione
+        if (!isColliding(newX, newY, playerWidth, playerHeight, tileWidth, tileHeight)) {
+            // Nessuna collisione: aggiorna la posizione
+            x = newX;
+            y = newY;
+            camera.position.set(x, y, 0);
         }
-        camera.position.set(x, y, 0);
-     
+    
+        // Aggiorna il tempo dell'animazione
         animationTime += Gdx.graphics.getDeltaTime();
         camera.update();
- 
+    
+        // Disegna il giocatore
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(currentAnimation.getKeyFrame(animationTime, true), x, y);
         batch.end();
     }
+    
+    /**
+     * Verifica la collisione con le celle della mappa.
+     */
+    private boolean isColliding(float x, float y, float width, float height, float tileWidth, float tileHeight) {
+        // Calcola i bordi del giocatore
+        float left = x;
+        float right = x + width;
+        float bottom = y;
+        float top = y + height;
+    
+        // Controlla i quattro angoli del giocatore
+        return isCellBlocked(left, bottom, tileWidth, tileHeight) ||
+               isCellBlocked(left, top, tileWidth, tileHeight) ||
+               isCellBlocked(right, bottom, tileWidth, tileHeight) ||
+               isCellBlocked(right, top, tileWidth, tileHeight);
+    }
+    
+    /**
+     * Controlla se una cella specifica è bloccata.
+     */
+    private boolean isCellBlocked(float worldX, float worldY, float tileWidth, float tileHeight) {
+        // Converti le coordinate del mondo in coordinate della griglia
+        int cellX = (int) (worldX / tileWidth);
+        int cellY = (int) (worldY / tileHeight);
+    
+        // Ottieni la cella
+        TiledMapTileLayer.Cell cell = collisionlayer.getCell(cellX, cellY);
+    
+        // Se la cella non è vuota, considera che blocca
+        return cell != null;
+    }
+    
+    
     public void dispose() {
         batch.dispose();
         image.dispose();

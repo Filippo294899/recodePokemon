@@ -31,9 +31,9 @@ public class City  implements Screen  {
     private float py=200;
     private float px=400;
     TiledMap tiledMap;
-
+    Player player;
     TiledMapRenderer tiledMapRenderer;
-    Player player = new Player(px,py);
+    
    
 
 
@@ -41,6 +41,7 @@ public class City  implements Screen  {
     public City(final Main app){
         this.app = app;
         System.out.println("uwu");
+        this.player = new Player(px, py, app);
 
     }
     @Override
@@ -69,9 +70,7 @@ public class City  implements Screen  {
         player.render();
       
         batch.end();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
-            app.openinventory();
-        }
+        
 
 
     }
