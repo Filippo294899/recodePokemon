@@ -69,6 +69,9 @@ public class City  implements Screen  {
         player.render();
       
         batch.end();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
+            app.openinventory();
+        }
 
 
     }
@@ -98,7 +101,7 @@ public class City  implements Screen  {
         }
         @Override
         public void hide() {
-            // TODO Auto-generated method stub
+   
            
         }
 }

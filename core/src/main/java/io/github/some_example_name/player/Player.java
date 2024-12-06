@@ -10,6 +10,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
+
+import io.github.some_example_name.player.inventory.Inventory;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,7 +87,7 @@ public class Player   {
         camera.update();
     }
     boolean collision;
-
+    
     public void render() {
 
         float tileWidth = collisionlayer.getTileWidth();
@@ -109,6 +112,7 @@ public class Player   {
         } else {
             animationTime = 0; 
         }
+        
         
        
         

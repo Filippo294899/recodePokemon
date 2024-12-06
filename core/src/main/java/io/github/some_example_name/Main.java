@@ -19,6 +19,7 @@ import com.badlogic.gdx.video.VideoPlayerCreator;
 import com.badlogic.gdx.video.scenes.scene2d.VideoActor;
 
 import io.github.some_example_name.player.Player;
+import io.github.some_example_name.player.inventory.Inventory;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 @SuppressWarnings("all")
@@ -28,6 +29,9 @@ public class Main extends Game {
     
     public  void showcity(){
         this.setScreen(new City(this));
+    }
+    public void openinventory(){
+        this.setScreen(new Inventory(this));
     }
 
     @Override
