@@ -20,7 +20,7 @@ import com.badlogic.gdx.video.VideoPlayerCreator;
 import com.badlogic.gdx.video.scenes.scene2d.VideoActor;
 
 import io.github.some_example_name.player.Player;
-
+@SuppressWarnings("all")
 public class titlescreen implements Screen {
     private final Main app;
     private SpriteBatch batch;
@@ -56,7 +56,7 @@ public class titlescreen implements Screen {
                         videoPlayer= null;
                         Gdx.app.log("VideoTest", file.name() + " fully played.");
                         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-                        app.showcity();
+                        
                         
                     }
                 });
@@ -80,6 +80,8 @@ public class titlescreen implements Screen {
         batch.begin();
         if (videoPlayer!=null){
             videoActor.draw(batch, 1f);
+        }else{
+            app.showcity();
         }
        
         batch.end();

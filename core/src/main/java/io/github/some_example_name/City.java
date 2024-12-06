@@ -10,10 +10,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+
 
 import io.github.some_example_name.player.Player;
-
+@SuppressWarnings("all")
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class City  implements Screen  {
     private SpriteBatch batch;
@@ -21,7 +28,12 @@ public class City  implements Screen  {
     public float y=140;
     public float x=210;
     private final Main app;
+    
+    TiledMap tiledMap;
+
+    TiledMapRenderer tiledMapRenderer;
     Player player = new Player(x,y);
+   
 
 
 
@@ -33,9 +45,13 @@ public class City  implements Screen  {
     @Override
     public void show() {
         System.out.println("create");
+        
+        tiledMap = new TmxMapLoader().load("maps\\basemap\\basemap.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         player.create();
+  
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+   
 
 
     }
@@ -43,13 +59,15 @@ public class City  implements Screen  {
     @Override
     public void render(float delta) {
         
-        ScreenUtils.clear(255.0f, 0.15f, 0.2f, 1f);
+        ScreenUtils.clear(0f, 0f, 0f, 1f);
         batch.begin();
+        
+        tiledMapRenderer.setView(player.camera);
+        tiledMapRenderer.render();
         player.render();
-        batch.draw(image, 140, 210);
-
+      
         batch.end();
-        System.out.println("rendering");
+
 
     }
         @Override

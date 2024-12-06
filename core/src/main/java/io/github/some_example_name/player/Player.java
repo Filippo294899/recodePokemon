@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
 import java.util.Arrays;
 import java.util.List;
@@ -30,12 +33,16 @@ public class Player   {
     public float y;
     public float x;
     public float speed=1;
-
+    TiledMap map ;
+    
+    TiledMapTileLayer collisionlayer ;
+        int collisionx ;
+        int collisiony ;
     private String lastdirection = "right";
     public Player(float x, float y){
         this.x = x;
         this.y = y;
-
+      
     }
     public float getx(){
         return x;
@@ -44,14 +51,17 @@ public class Player   {
         return y;
     }
 
-
+    
 
     public void create() {
 
         batch = new SpriteBatch();
         image = new Texture("player/destra.png");
         camera = new OrthographicCamera(x, y);
-
+        map =  new TmxMapLoader().load("maps\\basemap\\basemap.tmx");
+        collisionlayer =(TiledMapTileLayer) map .getLayers().get(2);
+        collisionx = collisionlayer.getHeight();
+        collisiony = collisionlayer.getWidth();
         Texture suSpriteSheet = new Texture("player/su.png");
         Texture giuSpriteSheet = new Texture("player/giu.png");
         Texture destraSpriteSheet = new Texture("player/destra.png");
@@ -72,11 +82,19 @@ public class Player   {
 
 
     public void render() {
-        
+        TiledMapTileLayer.Cell  cell = collisionlayer.getCell(collisionx,collisiony);
+        if (cell != null) {
+            if (x == collisionx && y == collisiony) {
+                System.out.println("collisione");
+            }
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             changeAnimation(suAnimation);
+            
             y += speed;
             camera.translate(0, speed, 0);
+            
+
         }else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             changeAnimation(giuAnimation);
             y -= speed;
