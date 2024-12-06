@@ -89,7 +89,10 @@ public class Player   {
 
         float tileWidth = collisionlayer.getTileWidth();
         float tileHeight = collisionlayer.getTileHeight();
+        int cellX = (int) (x / tileWidth);
+        int cellY = (int) (y / tileHeight);
     
+        TiledMapTileLayer.Cell cell = collisionlayer.getCell(cellX, cellY);
     
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             changeAnimation(suAnimation);
@@ -108,11 +111,8 @@ public class Player   {
         }
         
        
-        int cellX = (int) (x / tileWidth);
-        int cellY = (int) (x / tileHeight);
-    
-        TiledMapTileLayer.Cell cell = collisionlayer.getCell(cellX, cellY);
-    
+        
+        System.out.println("cella x " + cellX + " cella y " + cellY);
         if (cell == null) {
        
             
