@@ -33,35 +33,39 @@ public class Player   {
     public float y;
     public float x;
     public float speed=1;
-    TiledMap map ;
     
+    TiledMap map;
     TiledMapTileLayer collisionlayer ;
-        int collisionx ;
-        int collisiony ;
+    int collisionx ;
+    int collisiony ;
     private String lastdirection = "right";
-    public Player(float x, float y){
+    public Player(float x, float y) {
         this.x = x;
         this.y = y;
+       
       
     }
+    
+    
     public float getx(){
         return x;
     }
     public float gety(){
         return y;
     }
-
+    
     
 
-    public void create() {
+    public void create(TiledMap mappa) {
 
         batch = new SpriteBatch();
         image = new Texture("player/destra.png");
-        camera = new OrthographicCamera(x, y);
-        map =  new TmxMapLoader().load("maps\\basemap\\basemap.tmx");
-        collisionlayer =(TiledMapTileLayer) map .getLayers().get(2);
-        collisionx = collisionlayer.getHeight();
-        collisiony = collisionlayer.getWidth();
+        camera = new OrthographicCamera(210, 140);
+         map = mappa;
+          collisionlayer =(TiledMapTileLayer) map .getLayers().get(1);
+         collisionx = collisionlayer.getHeight();
+            collisiony = collisionlayer.getWidth();
+            
         Texture suSpriteSheet = new Texture("player/su.png");
         Texture giuSpriteSheet = new Texture("player/giu.png");
         Texture destraSpriteSheet = new Texture("player/destra.png");
@@ -79,44 +83,53 @@ public class Player   {
         camera.zoom=3;
         camera.update();
     }
-
+    boolean collision;
 
     public void render() {
-        TiledMapTileLayer.Cell  cell = collisionlayer.getCell(collisionx,collisiony);
-        if (cell != null) {
-            if (x == collisionx && y == collisiony) {
-                System.out.println("collisione");
-            }
-        }
+
+        float tileWidth = collisionlayer.getTileWidth();
+        float tileHeight = collisionlayer.getTileHeight();
+    
+    
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             changeAnimation(suAnimation);
-            
             y += speed;
-            camera.translate(0, speed, 0);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            changeAnimation(giuAnimation);
+            y -= speed; 
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            changeAnimation(destraAnimation);
+            x += speed; 
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            changeAnimation(sinistraAnimation);
+            x -= speed; 
+        } else {
+            animationTime = 0; 
+        }
+        
+       
+        int cellX = (int) (x / tileWidth);
+        int cellY = (int) (x / tileHeight);
+    
+        TiledMapTileLayer.Cell cell = collisionlayer.getCell(cellX, cellY);
+    
+        if (cell == null) {
+       
             
 
-        }else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            changeAnimation(giuAnimation);
-            y -= speed;
-            camera.translate(0, -speed, 0);
-        }else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            changeAnimation(destraAnimation);
-            x += speed;
-            camera.translate(speed, 0, 0);
-        }else if  (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            changeAnimation(sinistraAnimation);
-            x -= speed;
-            camera.translate(-speed, 0, 0);
-        } else{ animationTime=0;}
+        }else{
+            System.out.println("collisione");
+        }
+        camera.position.set(x, y, 0);
+     
         animationTime += Gdx.graphics.getDeltaTime();
         camera.update();
+ 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(currentAnimation.getKeyFrame(animationTime,true), x, y);
+        batch.draw(currentAnimation.getKeyFrame(animationTime, true), x, y);
         batch.end();
-
     }
-
     public void dispose() {
         batch.dispose();
         image.dispose();

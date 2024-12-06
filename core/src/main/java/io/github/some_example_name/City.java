@@ -28,11 +28,12 @@ public class City  implements Screen  {
     public float y=140;
     public float x=210;
     private final Main app;
-    
+    private float py=200;
+    private float px=400;
     TiledMap tiledMap;
 
     TiledMapRenderer tiledMapRenderer;
-    Player player = new Player(x,y);
+    Player player = new Player(px,py);
    
 
 
@@ -48,7 +49,8 @@ public class City  implements Screen  {
         
         tiledMap = new TmxMapLoader().load("maps\\basemap\\basemap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        player.create();
+  
+        player.create(tiledMap);
   
         batch = new SpriteBatch();
    
