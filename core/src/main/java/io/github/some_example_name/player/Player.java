@@ -86,9 +86,7 @@ public class Player   {
         camera.position.set(x , y,0);
         camera.zoom=3;
         camera.update();
-        if (Gdx.input.isKeyPressed(Input.Keys.E)){
-            app.openinventory();
-        }
+        
     }
     boolean collision;
     
@@ -104,7 +102,9 @@ public class Player   {
         // Calcola la nuova posizione
         float newX = x;
         float newY = y;
-    
+        if  (Gdx.input.isKeyJustPressed(Input.Keys.E)){
+            app.openinventory();
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             changeAnimation(suAnimation);
             newY += speed; // Movimento verso l'alto
