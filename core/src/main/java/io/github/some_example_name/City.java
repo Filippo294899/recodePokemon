@@ -42,7 +42,7 @@ public class City  implements Screen  {
         this.app = app;
         System.out.println("uwu");
         this.player = new Player(px, py, app);
-
+        
     }
     @Override
     public void show() {

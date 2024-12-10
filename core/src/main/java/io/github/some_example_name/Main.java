@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.video.VideoPlayer;
 import com.badlogic.gdx.video.VideoPlayerCreator;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.video.scenes.scene2d.VideoActor;
 
 import io.github.some_example_name.player.Player;
 import io.github.some_example_name.player.inventory.Inventory;
+import io.github.some_example_name.player.pokeinventory.SquadMenu;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 @SuppressWarnings("all")
@@ -27,10 +29,15 @@ public class Main extends Game {
     private SpriteBatch batch;
     private Texture image;
     private City ourCity = null;
-    
+    private SquadMenu sm = null;
     public  void showcity(){
         if (ourCity == null) ourCity = new City(this);
         this.setScreen(ourCity);
+    }
+
+    public void ShowSm(){
+        if (sm==null) sm = new SquadMenu(this);
+        this.setScreen(sm);
     }
     public void openinventory(){
         this.setScreen(new Inventory(this));

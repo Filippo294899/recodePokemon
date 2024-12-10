@@ -1,3 +1,4 @@
+
 package io.github.some_example_name.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -41,6 +42,7 @@ public class Player   {
     TiledMapTileLayer collisionlayer ;
     int collisionx ;
     int collisiony ;
+    private Animation<TextureRegion> lasAnimation;
     private String lastdirection = "right";
     public Player(float x, float y , final Main app) {
         this.x = x;
@@ -81,7 +83,16 @@ public class Player   {
         giuAnimation = makeCustomAnimation(giuSpriteSheet,width,height,frameTime);
         destraAnimation = makeCustomAnimation(destraSpriteSheet,width,height,frameTime);
         sinistraAnimation = makeCustomAnimation(sinistraSpriteSheet,width,height,frameTime);
-        currentAnimation = suAnimation;
+        
+        if  (lasAnimation == null) {
+            currentAnimation = suAnimation;
+        }
+        else{
+            currentAnimation = lasAnimation;
+
+        }
+        
+        
 
         camera.position.set(x , y,0);
         camera.zoom=3;
@@ -105,19 +116,27 @@ public class Player   {
         if  (Gdx.input.isKeyJustPressed(Input.Keys.E)){
             app.openinventory();
         }
+        if  (Gdx.input.isKeyJustPressed(Input.Keys.R)){
+            app.ShowSm();
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             changeAnimation(suAnimation);
+            lasAnimation = suAnimation;
             newY += speed; // Movimento verso l'alto
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             changeAnimation(giuAnimation);
+            lasAnimation = giuAnimation;
             newY -= speed; // Movimento verso il basso
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             changeAnimation(destraAnimation);
+            lasAnimation = destraAnimation;
             newX += speed; // Movimento verso destra
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            lasAnimation = sinistraAnimation;
             changeAnimation(sinistraAnimation);
             newX -= speed; // Movimento verso sinistra
         }
+
          else {
             animationTime = 0; // Nessun movimento
         }
@@ -205,6 +224,8 @@ public class Player   {
 
         return new Animation<>(frameTime,regions);
     }
+
+    
 
 
 }
